@@ -37,9 +37,9 @@ pipeline {
                     steps {
                         sh 'npm run build'
                         script {
-                            def semantic = sh(
-                            script: 'npm pkg get version | tr -d \'"\'', returnStdout: true
-                            ).trim()// Replace with your GitHub Container Registry username
+                            env.SEMANTIC_VERSION = sh(
+                                script: 'npm pkg get version | tr -d \'"\'', returnStdout: true
+                            ).trim()
                         }
                     }
                 }
@@ -54,18 +54,18 @@ pipeline {
                     docker.withRegistry('https://index.docker.io/v1/', 'jenkins-dockerhub') {
                         sh "docker tag ${IMAGE_NAME} ${DH_REPO}"
                         sh "docker tag ${IMAGE_NAME} ${DH_REPO}:${env.BUILD_NUMBER}"
-                        sh "docker tag ${IMAGE_NAME} ${DH_REPO}:${semantic}"
+                        sh "docker tag ${IMAGE_NAME} ${DH_REPO}:${env.SEMANTIC_VERSION}"
                         sh "docker push ${DH_REPO}"
                         sh "docker push ${DH_REPO}:${env.BUILD_NUMBER}"
-                        sh "docker push ${DH_REPO}:${semantic}"
+                        sh "docker push ${DH_REPO}:${env.SEMANTIC_VERSION}"
                     }
                     docker.withRegistry('https://ghcr.io/v1/', 'jenkins-github') {
                         sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}"
                         sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}:${env.BUILD_NUMBER}"
-                        sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}:${semantic}"
+                        sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}:${env.SEMANTIC_VERSION}"
                         sh "docker push ${GHCR_REPO}"
                         sh "docker push ${GHCR_REPO}:${env.BUILD_NUMBER}"
-                        sh "docker push ${GHCR_REPO}:${semantic}"
+                        sh "docker push ${GHCR_REPO}:${env.SEMANTIC_VERSION}"
                     }
                 }
             }
