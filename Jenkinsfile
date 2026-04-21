@@ -38,8 +38,7 @@ pipeline {
                         sh 'npm run build'
                         script {
                             def semantic = sh(
-                            script: 'npm pkg get version | tr -d \'"\''
-                            returnStdout: true
+                            script: 'npm pkg get version | tr -d \'"\'', returnStdout: true
                             ).trim()// Replace with your GitHub Container Registry username
                         }
         }
