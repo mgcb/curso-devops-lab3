@@ -36,6 +36,7 @@ stages {
                 steps {
                     sh 'npm run build'
                 }
+            }
         }
     }
     stage('Build and Push Docker Image') {
@@ -46,5 +47,4 @@ stages {
             }
         }
     }
-    
 }
