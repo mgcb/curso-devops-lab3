@@ -7,7 +7,11 @@ pipeline {
         // MY_VAR = 'some value'
         IMAGE_NAME = 'curso-devops-lab3'
         DH_REPO = 'melco28/curso-devops-lab3'
-        GHCR_REPO = 'ghcr.io/mgcb/curso-devops-lab3' // Replace with your GitHub Container Registry username
+        GHCR_REPO = 'ghcr.io/mgcb/curso-devops-lab3'
+        def semantic = sh(
+            script: 'npm pkg get version | tr -d \'"\''
+            returnStdout: true
+            ).trim()// Replace with your GitHub Container Registry username
     }
 
     stages {
@@ -42,10 +46,6 @@ pipeline {
         }
         stage('Build and Push Docker Image') {
             steps {
-                var semantic = sh(
-                    script: 'npm pkg get version | tr -d \'"\''
-                    returnStdout: true
-                    ).trim()
                 script {
                     // Build the Docker image
                     sh "docker buildx build --platform linux/arm64,linux/amd64 -t ${IMAGE_NAME} ."
