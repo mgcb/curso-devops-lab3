@@ -46,11 +46,14 @@ pipeline {
                     // Build the Docker image
                     sh "docker buildx build --platform linux/arm64,linux/amd64 -t ${IMAGE_NAME} ."
                     
-                    sh "docker tag ${IMAGE_NAME} ${DH_REPO}"
-                    sh "docker push ${DH_REPO}"
-
-                    sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}"
-                    sh "docker push ${GHCR_REPO}"
+                    docker.withRegistry('https://index.docker.io/v1/', 'jenkins-dockerhub') {
+                        sh "docker tag ${IMAGE_NAME} ${DH_REPO}"
+                        sh "docker push ${DH_REPO}"
+                    }
+                    docker.withRegistry('https://ghcr.io/v1/', 'jenkins-dockerhub') {
+                        sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}"
+                        sh "docker push ${GHCR_REPO}"
+                    }
                 }
             }
         }
