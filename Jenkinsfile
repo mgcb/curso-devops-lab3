@@ -43,7 +43,8 @@ pipeline {
         stage('Build and Push Docker Image') {
             steps {
                 var semantic = sh(
-                    script: 'npm pkg get version | tr -d \'"\'', returnStdout: true
+                    script: 'npm pkg get version | tr -d \'"\''
+                    returnStdout: true
                     ).trim()
                 script {
                     // Build the Docker image
