@@ -42,6 +42,9 @@ pipeline {
         }
         stage('Build and Push Docker Image') {
             steps {
+                var semantic = sh(
+                    script: 'npm pkg get version | tr -d \'"\'', returnStdout: true
+                    ).trim()
                 script {
                     // Build the Docker image
                     sh "docker buildx build --platform linux/arm64,linux/amd64 -t ${IMAGE_NAME} ."
@@ -49,14 +52,18 @@ pipeline {
                     docker.withRegistry('https://index.docker.io/v1/', 'jenkins-dockerhub') {
                         sh "docker tag ${IMAGE_NAME} ${DH_REPO}"
                         sh "docker tag ${IMAGE_NAME} ${DH_REPO}:${env.BUILD_NUMBER}"
+                        sh "docker tag ${IMAGE_NAME} ${DH_REPO}:${semantic}"
                         sh "docker push ${DH_REPO}"
                         sh "docker push ${DH_REPO}:${env.BUILD_NUMBER}"
+                        sh "docker push ${DH_REPO}:${semantic}"
                     }
                     docker.withRegistry('https://ghcr.io/v1/', 'jenkins-github') {
                         sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}"
                         sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}:${env.BUILD_NUMBER}"
+                        sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}:${semantic}"
                         sh "docker push ${GHCR_REPO}"
                         sh "docker push ${GHCR_REPO}:${env.BUILD_NUMBER}"
+                        sh "docker push ${GHCR_REPO}:${semantic}"
                     }
                 }
             }
