@@ -50,7 +50,7 @@ pipeline {
                         sh "docker tag ${IMAGE_NAME} ${DH_REPO}"
                         sh "docker push ${DH_REPO}"
                     }
-                    docker.withRegistry('https://ghcr.io/v1/', 'jenkins-dockerhub') {
+                    docker.withRegistry('https://ghcr.io/v1/', 'jenkins-github') {
                         sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}"
                         sh "docker push ${GHCR_REPO}"
                     }
