@@ -48,11 +48,15 @@ pipeline {
                     
                     docker.withRegistry('https://index.docker.io/v1/', 'jenkins-dockerhub') {
                         sh "docker tag ${IMAGE_NAME} ${DH_REPO}"
+                        sh "docker tag ${IMAGE_NAME} ${DH_REPO}:$(env.BUILD_NUMBER)"
                         sh "docker push ${DH_REPO}"
+                        sh "docker push ${DH_REPO}:$(env.BUILD_NUMBER)"
                     }
                     docker.withRegistry('https://ghcr.io/v1/', 'jenkins-github') {
                         sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}"
+                        sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}:$(env.BUILD_NUMBER)"
                         sh "docker push ${GHCR_REPO}"
+                        sh "docker push ${GHCR_REPO}:$(env.BUILD_NUMBER)"
                     }
                 }
             }
