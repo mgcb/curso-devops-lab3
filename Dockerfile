@@ -1,4 +1,4 @@
-FROM node:24 as build
+FROM node:24 AS build
 
 #solo define en la carpeta en la que estare dentro del contenedor
 WORKDIR /app
