@@ -45,6 +45,8 @@ pipeline {
                 script {
                     // Build the Docker image
                     sh "docker buildx build --platform linux/arm64,linux/amd64 -t ${IMAGE_NAME} ."
+                    sh "docker tag ${IMAGE_NAME} ${DH_REPO}"
+                    sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}"
                 }
             }
         }
