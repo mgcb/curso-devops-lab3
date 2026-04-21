@@ -8,12 +8,6 @@ pipeline {
         IMAGE_NAME = 'curso-devops-lab3'
         DH_REPO = 'melco28/curso-devops-lab3'
         GHCR_REPO = 'ghcr.io/mgcb/curso-devops-lab3'
-        script {
-            def semantic = sh(
-            script: 'npm pkg get version | tr -d \'"\''
-            returnStdout: true
-            ).trim()// Replace with your GitHub Container Registry username
-        }
     }
 
     stages {
@@ -42,6 +36,13 @@ pipeline {
                 stage('CI - build') {
                     steps {
                         sh 'npm run build'
+                        script {
+                            def semantic = sh(
+                            script: 'npm pkg get version | tr -d \'"\''
+                            returnStdout: true
+                            ).trim()// Replace with your GitHub Container Registry username
+                        }
+        }
                     }
                 }
             }
