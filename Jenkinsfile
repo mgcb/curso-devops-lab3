@@ -41,11 +41,10 @@ pipeline {
                             script: 'npm pkg get version | tr -d \'"\'', returnStdout: true
                             ).trim()// Replace with your GitHub Container Registry username
                         }
-        }
                     }
                 }
             }
-        }
+        }    
         stage('Build and Push Docker Image') {
             steps {
                 script {
