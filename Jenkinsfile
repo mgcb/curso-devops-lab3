@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image
-                    sh "docker build -t ${IMAGE_NAME} ."
+                    sh "docker buildx build --platform linux/arm64,linux/amd64 -t ${IMAGE_NAME} ."
                 }
             }
         }
