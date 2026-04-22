@@ -87,30 +87,27 @@ pipeline {
             stages {
                 stage('CD - Build and Push to Docker Hub') {
                     steps {
-                        steps {
-                            script {
-                                // Build the Docker image
-                                sh "docker buildx build --platform linux/arm64,linux/amd64 -t ${IMAGE_NAME} ."
-                                
-                                docker.withRegistry('https://index.docker.io/v1/', 'jenkins-dockerhub') {
-                                    sh "docker tag ${env.IMAGE_NAME} ${env.DH_REPO}:latest"
-                                    sh "docker tag ${env.IMAGE_NAME} ${env.DH_REPO}:${env.BUILD_NUMBER}"
-                                    sh "docker tag ${env.IMAGE_NAME} ${env.DH_REPO}:${env.SEMANTIC_VERSION}"
-                                    sh "docker push ${env.DH_REPO}:latest"
-                                    sh "docker push ${env.DH_REPO}:${env.BUILD_NUMBER}"
-                                    sh "docker push ${env.DH_REPO}:${env.SEMANTIC_VERSION}"
-                                }
-                                docker.withRegistry('https://ghcr.io/v1/', 'jenkins-github') {
-                                    sh "docker tag ${env.IMAGE_NAME} ${env.GHCR_REPO}:latest"
-                                    sh "docker tag ${env.IMAGE_NAME} ${env.GHCR_REPO}:${env.BUILD_NUMBER}"
-                                    sh "docker tag ${env.IMAGE_NAME} ${env.GHCR_REPO}:${env.SEMANTIC_VERSION}"
-                                    sh "docker push ${env.GHCR_REPO}:latest"
-                                    sh "docker push ${env.GHCR_REPO}:${env.BUILD_NUMBER}"
-                                    sh "docker push ${env.GHCR_REPO}:${env.SEMANTIC_VERSION}"
-                                }
+                        script {
+                            // Build the Docker image
+                            sh "docker buildx build --platform linux/arm64,linux/amd64 -t ${IMAGE_NAME} ."
+                            
+                            docker.withRegistry('https://index.docker.io/v1/', 'jenkins-dockerhub') {
+                                sh "docker tag ${env.IMAGE_NAME} ${env.DH_REPO}:latest"
+                                sh "docker tag ${env.IMAGE_NAME} ${env.DH_REPO}:${env.BUILD_NUMBER}"
+                                sh "docker tag ${env.IMAGE_NAME} ${env.DH_REPO}:${env.SEMANTIC_VERSION}"
+                                sh "docker push ${env.DH_REPO}:latest"
+                                sh "docker push ${env.DH_REPO}:${env.BUILD_NUMBER}"
+                                sh "docker push ${env.DH_REPO}:${env.SEMANTIC_VERSION}"
+                            }
+                            docker.withRegistry('https://ghcr.io/v1/', 'jenkins-github') {
+                                sh "docker tag ${env.IMAGE_NAME} ${env.GHCR_REPO}:latest"
+                                sh "docker tag ${env.IMAGE_NAME} ${env.GHCR_REPO}:${env.BUILD_NUMBER}"
+                                sh "docker tag ${env.IMAGE_NAME} ${env.GHCR_REPO}:${env.SEMANTIC_VERSION}"
+                                sh "docker push ${env.GHCR_REPO}:latest"
+                                sh "docker push ${env.GHCR_REPO}:${env.BUILD_NUMBER}"
+                                sh "docker push ${env.GHCR_REPO}:${env.SEMANTIC_VERSION}"
                             }
                         }
-            
                     }
                 }
                 stage('CD - Deploy to Kubernetes') {
