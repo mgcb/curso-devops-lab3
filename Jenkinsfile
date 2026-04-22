@@ -68,11 +68,12 @@ pipeline {
                     }
                 }
                 stage('QA - Quality Gate') {
-                    def qualityGate = waitForQualityGate() // Wait for SonarQube analysis to complete and get the quality gate result
                     steps {
-                        if (qualityGate.status != 'OK') {
-                            error "Pipeline fallo debido a este error en la puerta de calidad: ${qualityGate.status}"
-                        }
+                        script {
+                            def qualityGate = waitForQualityGate() // Wait for SonarQube analysis to complete and get the quality gate result
+                            if (qualityGate.status != 'OK') {
+                                error "Pipeline failed due to quality gate failure: ${qualityGate.status}"
+                            }
                     }
                 }
             }
