@@ -18,6 +18,15 @@ pipeline {
                 }
             }
             stages {
+                stage {'CI - Set semantic version'} {
+                    steps {
+                        script {
+                            env.SEMANTIC_VERSION = sh(
+                                script: 'npm pkg get version | tr -d \'"\'', returnStdout: true
+                            ).trim()
+                        }
+                    }
+                }
                 stage('CI - Install dependencies') {
                     steps {
                         sh 'npm install'
@@ -30,21 +39,42 @@ pipeline {
                 }
                 stage('CI - test') {
                     steps {
-                        sh 'npm run test'
+                        sh 'npm run test:cov'
                     }
                 }
                 stage('CI - build') {
                     steps {
                         sh 'npm run build'
-                        script {
-                            env.SEMANTIC_VERSION = sh(
-                                script: 'npm pkg get version | tr -d \'"\'', returnStdout: true
-                            ).trim()
+                    }
+                }
+            }
+        }
+        stage('Quality Assurance') {
+            agent {
+                docker {
+                    image 'sonarsource/sonar-scanner-cli:latest'
+                    args '--network=devops-infra_default'
+                    reuseNode true
+                }
+            }
+            stage('QA - Code Analysis') {
+                steps {
+                    script {
+                        withSonarQubeEnv('sonarqube') {
+                            sh 'sonar-scanner'
                         }
                     }
                 }
             }
-        }    
+            stage('QA - Quality Gate') {
+                def qualityGate = waitForQualityGate() // Wait for SonarQube analysis to complete and get the quality gate result
+                steps {
+                    if (qualityGate.status != 'OK') {
+                        error "Pipeline fallo debido a este error en la puerta de calidad: ${qualityGate.status}"
+                    }
+                }
+            }
+        }
         stage('Build and Push Docker Image') {
             steps {
                 script {
