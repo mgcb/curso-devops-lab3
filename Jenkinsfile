@@ -74,6 +74,7 @@ pipeline {
                             if (qualityGate.status != 'OK') {
                                 error "Pipeline failed due to quality gate failure: ${qualityGate.status}"
                             }
+                        }
                     }
                 }
             }
