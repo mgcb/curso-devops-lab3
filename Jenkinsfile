@@ -93,20 +93,20 @@ pipeline {
                                 sh "docker buildx build --platform linux/arm64,linux/amd64 -t ${IMAGE_NAME} ."
                                 
                                 docker.withRegistry('https://index.docker.io/v1/', 'jenkins-dockerhub') {
-                                    sh "docker tag ${IMAGE_NAME} ${DH_REPO}:latest"
-                                    sh "docker tag ${IMAGE_NAME} ${DH_REPO}:${env.BUILD_NUMBER}"
-                                    sh "docker tag ${IMAGE_NAME} ${DH_REPO}:${env.SEMANTIC_VERSION}"
-                                    sh "docker push ${DH_REPO}:latest"
-                                    sh "docker push ${DH_REPO}:${env.BUILD_NUMBER}"
-                                    sh "docker push ${DH_REPO}:${env.SEMANTIC_VERSION}"
+                                    sh "docker tag ${env.IMAGE_NAME} ${env.DH_REPO}:latest"
+                                    sh "docker tag ${env.IMAGE_NAME} ${env.DH_REPO}:${env.BUILD_NUMBER}"
+                                    sh "docker tag ${env.IMAGE_NAME} ${env.DH_REPO}:${env.SEMANTIC_VERSION}"
+                                    sh "docker push ${env.DH_REPO}:latest"
+                                    sh "docker push ${env.DH_REPO}:${env.BUILD_NUMBER}"
+                                    sh "docker push ${env.DH_REPO}:${env.SEMANTIC_VERSION}"
                                 }
                                 docker.withRegistry('https://ghcr.io/v1/', 'jenkins-github') {
-                                    sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}:latest"
-                                    sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}:${env.BUILD_NUMBER}"
-                                    sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}:${env.SEMANTIC_VERSION}"
-                                    sh "docker push ${GHCR_REPO}:latest"
-                                    sh "docker push ${GHCR_REPO}:${env.BUILD_NUMBER}"
-                                    sh "docker push ${GHCR_REPO}:${env.SEMANTIC_VERSION}"
+                                    sh "docker tag ${env.IMAGE_NAME} ${env.GHCR_REPO}:latest"
+                                    sh "docker tag ${env.IMAGE_NAME} ${env.GHCR_REPO}:${env.BUILD_NUMBER}"
+                                    sh "docker tag ${env.IMAGE_NAME} ${env.GHCR_REPO}:${env.SEMANTIC_VERSION}"
+                                    sh "docker push ${env.GHCR_REPO}:latest"
+                                    sh "docker push ${env.GHCR_REPO}:${env.BUILD_NUMBER}"
+                                    sh "docker push ${env.GHCR_REPO}:${env.SEMANTIC_VERSION}"
                                 }
                             }
                         }
@@ -124,8 +124,8 @@ pipeline {
                         script {
                             withKubeConfig([credentialsId: 'k8s-cluster']) {
                             // Assuming you have kubectl configured and a deployment YAML file
-                            sh "kubectl set image deployment/${DEPLOYMENT_NAME} ${CONTAINER_NAME}=${GHCR_REPO}:${env.BUILD_NUMBER} -n ${NAMESPACE}"
-                            sh "kubectl rollout status deployment/${DEPLOYMENT_NAME} -n ${NAMESPACE}"
+                            sh "kubectl set image deployment/${env.DEPLOYMENT_NAME} ${env.CONTAINER_NAME}=${env.GHCR_REPO}:${env.BUILD_NUMBER} -n ${env.NAMESPACE}"
+                            sh "kubectl rollout status deployment/${env.DEPLOYMENT_NAME} -n ${env.NAMESPACE}"
                             }
                         }
                     }
