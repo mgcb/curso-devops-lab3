@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mcorletto
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: curso-devops-lab3-config
+  namespace: mcorletto
+data:
+  USER_KEY: "admin"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: curso-devops-lab3-secret
+  namespace: mcorletto
+type: Opaque
+data:
+  BD_PASSWORD: "password"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: curso-devops-lab3-deployment
+  namespace: mcorletto
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: curso-devops-lab3
+  template:
+    metadata:
+      labels:
+        app: curso-devops-lab3
+    spec:
+      containers:
+      - name: curso-devops-lab3
+        image: ghcr.io/mgcb/curso-devops-lab3
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - configMapRef:
+            name: curso-devops-lab3-config
+        - secretRef:
+            name: curso-devops-lab3-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: curso-devops-lab3-svc
+  namespace: mcorletto
+spec:
+  selector:
+    app: curso-devops-lab3
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+  type: ClusterIP
