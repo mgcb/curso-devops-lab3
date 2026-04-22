@@ -18,7 +18,7 @@ pipeline {
                 }
             }
             stages {
-                stage {'CI - Set semantic version'} {
+                stage ('CI - Set semantic version') {
                     steps {
                         script {
                             env.SEMANTIC_VERSION = sh(
