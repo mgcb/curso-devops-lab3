@@ -18,7 +18,7 @@ pipeline {
                 }
             }
             stages {
-                stage ('CI - Set semantic version') {
+                stage('CI - Set semantic version') {
                     steps {
                         script {
                             env.SEMANTIC_VERSION = sh(
@@ -57,20 +57,22 @@ pipeline {
                     reuseNode true
                 }
             }
-            stage('QA - Code Analysis') {
-                steps {
-                    script {
-                        withSonarQubeEnv('sonarqube') {
-                            sh 'sonar-scanner'
+            stages {
+                stage('QA - Code Analysis') {
+                    steps {
+                        script {
+                            withSonarQubeEnv('sonarqube') {
+                                sh 'sonar-scanner'
+                            }
                         }
                     }
                 }
-            }
-            stage('QA - Quality Gate') {
-                def qualityGate = waitForQualityGate() // Wait for SonarQube analysis to complete and get the quality gate result
-                steps {
-                    if (qualityGate.status != 'OK') {
-                        error "Pipeline fallo debido a este error en la puerta de calidad: ${qualityGate.status}"
+                stage('QA - Quality Gate') {
+                    def qualityGate = waitForQualityGate() // Wait for SonarQube analysis to complete and get the quality gate result
+                    steps {
+                        if (qualityGate.status != 'OK') {
+                            error "Pipeline fallo debido a este error en la puerta de calidad: ${qualityGate.status}"
+                        }
                     }
                 }
             }
