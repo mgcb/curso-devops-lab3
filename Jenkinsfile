@@ -8,6 +8,10 @@ pipeline {
         IMAGE_NAME = 'curso-devops-lab3'
         DH_REPO = 'melco28/curso-devops-lab3'
         GHCR_REPO = 'ghcr.io/mgcb/curso-devops-lab3'
+        DEPLOYMENT_NAME = 'curso-devops-lab3-deployment'
+        CONTAINER_NAME = 'curso-devops-lab3'
+        NAMESPACE = 'mcorletto'
+
     }
 
     stages {
@@ -79,27 +83,51 @@ pipeline {
                 }
             }
         }
-        stage('Build and Push Docker Image') {
-            steps {
-                script {
-                    // Build the Docker image
-                    sh "docker buildx build --platform linux/arm64,linux/amd64 -t ${IMAGE_NAME} ."
-                    
-                    docker.withRegistry('https://index.docker.io/v1/', 'jenkins-dockerhub') {
-                        sh "docker tag ${IMAGE_NAME} ${DH_REPO}"
-                        sh "docker tag ${IMAGE_NAME} ${DH_REPO}:${env.BUILD_NUMBER}"
-                        sh "docker tag ${IMAGE_NAME} ${DH_REPO}:${env.SEMANTIC_VERSION}"
-                        sh "docker push ${DH_REPO}"
-                        sh "docker push ${DH_REPO}:${env.BUILD_NUMBER}"
-                        sh "docker push ${DH_REPO}:${env.SEMANTIC_VERSION}"
+        stage('Continous Deployment') {
+            stages {
+                stage('CD - Build and Push to Docker Hub') {
+                    steps {
+                        steps {
+                            script {
+                                // Build the Docker image
+                                sh "docker buildx build --platform linux/arm64,linux/amd64 -t ${IMAGE_NAME} ."
+                                
+                                docker.withRegistry('https://index.docker.io/v1/', 'jenkins-dockerhub') {
+                                    sh "docker tag ${IMAGE_NAME} ${DH_REPO}:latest"
+                                    sh "docker tag ${IMAGE_NAME} ${DH_REPO}:${env.BUILD_NUMBER}"
+                                    sh "docker tag ${IMAGE_NAME} ${DH_REPO}:${env.SEMANTIC_VERSION}"
+                                    sh "docker push ${DH_REPO}:latest"
+                                    sh "docker push ${DH_REPO}:${env.BUILD_NUMBER}"
+                                    sh "docker push ${DH_REPO}:${env.SEMANTIC_VERSION}"
+                                }
+                                docker.withRegistry('https://ghcr.io/v1/', 'jenkins-github') {
+                                    sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}:latest"
+                                    sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}:${env.BUILD_NUMBER}"
+                                    sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}:${env.SEMANTIC_VERSION}"
+                                    sh "docker push ${GHCR_REPO}:latest"
+                                    sh "docker push ${GHCR_REPO}:${env.BUILD_NUMBER}"
+                                    sh "docker push ${GHCR_REPO}:${env.SEMANTIC_VERSION}"
+                                }
+                            }
+                        }
+            
                     }
-                    docker.withRegistry('https://ghcr.io/v1/', 'jenkins-github') {
-                        sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}"
-                        sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}:${env.BUILD_NUMBER}"
-                        sh "docker tag ${IMAGE_NAME} ${GHCR_REPO}:${env.SEMANTIC_VERSION}"
-                        sh "docker push ${GHCR_REPO}"
-                        sh "docker push ${GHCR_REPO}:${env.BUILD_NUMBER}"
-                        sh "docker push ${GHCR_REPO}:${env.SEMANTIC_VERSION}"
+                }
+                stage('CD - Deploy to Kubernetes') {
+                    agent {
+                        docker {
+                            image 'alpine/k8s:1.34'
+                            reuseNode true
+                        }
+                    }
+                    steps {
+                        script {
+                            withKubeConfig([credentialsId: 'k8s-cluster']) {
+                            // Assuming you have kubectl configured and a deployment YAML file
+                            sh "kubectl set image deployment/${DEPLOYMENT_NAME} ${CONTAINER_NAME}=${GHCR_REPO}:${env.BUILD_NUMBER} -n ${NAMESPACE}"
+                            sh "kubectl rollout status deployment/${DEPLOYMENT_NAME} -n ${NAMESPACE}"
+                            }
+                        }
                     }
                 }
             }
