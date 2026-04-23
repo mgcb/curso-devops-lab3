@@ -115,6 +115,7 @@ pipeline {
                         agent {
                             docker {
                                 image 'alpine/k8s:1.34.7'
+                                args '--add-host=host.docker.internal:host-gateway'
                                 reuseNode true
                             }
                         }
