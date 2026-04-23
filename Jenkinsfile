@@ -111,14 +111,13 @@ pipeline {
                     }
                 }
                 stage('CD - Deploy to Kubernetes') {
-                    steps {
-                        agent {
-                            docker {
-                                image 'alpine/k8s:1.34.7'
-                                args '--add-host=host.docker.internal:host-gateway'
-                                reuseNode true
-                            }
+                    agent {
+                        docker {
+                            image 'alpine/k8s:1.34.7'
+                            reuseNode true
                         }
+                    }
+                    steps {
                         script {
                             withKubeConfig([credentialsId: 'k8s-cluster']) {
                             // Assuming you have kubectl configured and a deployment YAML file
