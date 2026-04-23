@@ -17,7 +17,7 @@ metadata:
   name: curso-devops-lab3-secret
   namespace: mcorletto
 type: Opaque
-data:
+stringData:
   BD_PASSWORD: "password"
 ---
 apiVersion: apps/v1
