@@ -1,0 +1,1789 @@
+Started by user unknown or anonymous
+ > git rev-parse --resolve-git-dir /var/jenkins_home/caches/git-ec4d8469caea2fc3c10a9ec9f8c5f1cb/.git # timeout=10
+Setting origin to https://github.com/mgcb/curso-devops-lab3.git
+ > git config remote.origin.url https://github.com/mgcb/curso-devops-lab3.git # timeout=10
+Fetching origin...
+Fetching upstream changes from origin
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git config --get remote.origin.url # timeout=10
+ > git fetch --no-tags --force --progress -- origin +refs/heads/*:refs/remotes/origin/* # timeout=10
+Seen branch in repository origin/main
+Seen 1 remote branch
+Obtained Jenkinsfile from d249e917ad541f5244d038611495b40387313227
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/curso-devops-lab3_main
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/curso-devops-lab3_main/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/mgcb/curso-devops-lab3.git # timeout=10
+Fetching without tags
+Fetching upstream changes from https://github.com/mgcb/curso-devops-lab3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --no-tags --force --progress -- https://github.com/mgcb/curso-devops-lab3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+Checking out Revision d249e917ad541f5244d038611495b40387313227 (main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f d249e917ad541f5244d038611495b40387313227 # timeout=10
+Commit message: "Fix: String data"
+ > git rev-list --no-walk d249e917ad541f5244d038611495b40387313227 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Continous Integration)
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/curso-devops-lab3_main@2
+[Pipeline] {
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/curso-devops-lab3_main@2/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/mgcb/curso-devops-lab3.git # timeout=10
+Fetching without tags
+Fetching upstream changes from https://github.com/mgcb/curso-devops-lab3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --no-tags --force --progress -- https://github.com/mgcb/curso-devops-lab3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+Checking out Revision d249e917ad541f5244d038611495b40387313227 (main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f d249e917ad541f5244d038611495b40387313227 # timeout=10
+Commit message: "Fix: String data"
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . node:24
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container c8cf3ecd2449a2ead69ef766c59d3739ada682a6a0ddf847060cef91f9c31878
+$ docker run -t -d -u 0:0 -w /var/jenkins_home/workspace/curso-devops-lab3_main@2 --volumes-from c8cf3ecd2449a2ead69ef766c59d3739ada682a6a0ddf847060cef91f9c31878 -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** node:24 cat
+$ docker top d147fb1da746d5b8564f2d0091eff43ad91c2cebaad38b126b6af9beded8188e -eo pid,comm
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (CI - Set semantic version)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ npm pkg get version
++ tr -d "
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (CI - Install dependencies)
+[Pipeline] sh
++ npm install
+
+up to date, audited 688 packages in 1s
+
+144 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (CI - lint)
+[Pipeline] sh
++ npm run lint
+
+> curso-devops-lab3@0.0.1 lint
+> eslint "{src,apps,libs,test}/**/*.ts" --fix
+
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (CI - test)
+[Pipeline] sh
++ npm run test:cov
+
+> curso-devops-lab3@0.0.1 test:cov
+> jest --coverage
+
+PASS src/app.controller.spec.ts
+  AppController
+    root
+      ✓ should return "Hello World!" (9 ms)
+
+-----------------------|---------|----------|---------|---------|-------------------
+File                   | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-----------------------|---------|----------|---------|---------|-------------------
+All files              |   14.94 |    16.66 |   16.66 |   13.84 |                   
+ src                   |      50 |       50 |      75 |      45 |                   
+  app.controller.ts    |     100 |       75 |     100 |     100 | 6                 
+  app.module.ts        |       0 |      100 |     100 |       0 | 1-12              
+  app.service.ts       |     100 |      100 |     100 |     100 |                   
+  main.ts              |       0 |        0 |       0 |       0 | 1-8               
+ src/health            |       0 |        0 |       0 |       0 |                   
+  health.controller.ts |       0 |        0 |       0 |       0 | 1-10              
+  health.module.ts     |       0 |      100 |     100 |       0 | 1-9               
+  health.service.ts    |       0 |      100 |       0 |       0 | 1-8               
+ src/items             |       0 |        0 |       0 |       0 |                   
+  items.controller.ts  |       0 |        0 |       0 |       0 | 1-34              
+  items.module.ts      |       0 |      100 |     100 |       0 | 1-9               
+  items.service.ts     |       0 |        0 |       0 |       0 | 1-36              
+-----------------------|---------|----------|---------|---------|-------------------
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        3.31 s
+Ran all test suites.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (CI - build)
+[Pipeline] sh
++ npm run build
+
+> curso-devops-lab3@0.0.1 build
+> nest build
+
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+$ docker stop --time=1 d147fb1da746d5b8564f2d0091eff43ad91c2cebaad38b126b6af9beded8188e
+$ docker rm -f --volumes d147fb1da746d5b8564f2d0091eff43ad91c2cebaad38b126b6af9beded8188e
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Quality Assurance)
+[Pipeline] getContext
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . sonarsource/sonar-scanner-cli:latest
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container c8cf3ecd2449a2ead69ef766c59d3739ada682a6a0ddf847060cef91f9c31878
+$ docker run -t -d -u 0:0 --network=devops-infra_default -w /var/jenkins_home/workspace/curso-devops-lab3_main --volumes-from c8cf3ecd2449a2ead69ef766c59d3739ada682a6a0ddf847060cef91f9c31878 -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** sonarsource/sonar-scanner-cli:latest cat
+$ docker top 9a288560e05a7de51c0e1cdfe473cb6c348ac1fb74f49859151f3eee54b150fe -eo pid,comm
+ERROR: The container started but didn't run the expected command. Please double check your ENTRYPOINT does execute the command passed as docker run argument, as required by official docker images (see https://github.com/docker-library/official-images#consistency for entrypoint consistency requirements).
+Alternatively you can force image entrypoint to be disabled by adding option `--entrypoint=''`.
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (QA - Code Analysis)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] withSonarQubeEnv
+Injecting SonarQube environment variables using the configuration: sonarqube
+[Pipeline] {
+[Pipeline] sh
++ sonar-scanner
+03:34:07.902 INFO  Scanner configuration file: /opt/sonar-scanner/conf/sonar-scanner.properties
+03:34:07.906 INFO  Project root configuration file: /var/jenkins_home/workspace/curso-devops-lab3_main/sonar-project.properties
+03:34:07.948 INFO  SonarScanner CLI 8.0.1.6346
+03:34:07.976 INFO  Linux 6.12.76-linuxkit amd64
+03:34:10.731 INFO  Communicating with SonarQube Community Build 26.4.0.121862
+03:34:10.737 INFO  JRE provisioning: os[linux], arch[x86_64]
+03:34:15.428 INFO  Starting SonarScanner Engine...
+03:34:15.429 INFO  Java 21.0.9 Eclipse Adoptium (64-bit)
+03:34:18.912 INFO  Load global settings
+03:34:19.179 INFO  Load global settings (done) | time=274ms
+03:34:19.199 INFO  Server id: D1BE41C1-AZ2JDoiE-DO0RjUeul-j
+03:34:19.243 INFO  Loading required plugins
+03:34:19.244 INFO  Load plugins index
+03:34:19.283 INFO  Load plugins index (done) | time=38ms
+03:34:19.285 INFO  Load/download plugins
+03:34:19.929 INFO  Load/download plugins (done) | time=639ms
+03:34:20.853 INFO  Process project properties
+03:34:20.879 INFO  Process project properties (done) | time=27ms
+03:34:20.901 INFO  Project key: curso-devops-lab3
+03:34:20.902 INFO  Base dir: /var/jenkins_home/workspace/curso-devops-lab3_main
+03:34:20.903 INFO  Working dir: /var/jenkins_home/workspace/curso-devops-lab3_main/.scannerwork
+03:34:20.939 INFO  Load project settings for component key: 'curso-devops-lab3'
+03:34:21.023 INFO  Load project settings for component key: 'curso-devops-lab3' (done) | time=84ms
+03:34:21.128 INFO  Load quality profiles
+03:34:21.219 INFO  Load quality profiles (done) | time=90ms
+03:34:21.257 INFO  Auto-configuring with CI 'Jenkins'
+03:34:21.370 INFO  Load active rules
+03:34:22.030 INFO  Load active rules (done) | time=659ms
+03:34:22.071 INFO  Load analysis cache
+03:34:22.122 INFO  Load analysis cache (5.2 kB) | time=50ms
+03:34:22.687 INFO  Preprocessing files...
+03:34:22.819 INFO  1 language detected in 11 preprocessed files (done) | time=128ms
+03:34:22.822 INFO  0 files ignored because of scm ignore settings
+03:34:22.836 INFO  Loading plugins for detected languages
+03:34:22.837 INFO  Load/download plugins
+03:34:24.211 INFO  Load/download plugins (done) | time=1362ms
+03:34:25.218 INFO  Load project repositories
+03:34:25.406 INFO  Load project repositories (done) | time=190ms
+03:34:25.484 INFO  Indexing files...
+03:34:25.484 INFO  Project configuration:
+03:34:25.525 INFO  11 files indexed (done) | time=41ms
+03:34:25.531 INFO  Quality profile for ts: Sonar way
+03:34:25.532 INFO  ------------- Run sensors on module curso-devops-lab3
+03:34:25.676 INFO  Load metrics repository
+03:34:25.759 INFO  Load metrics repository (done) | time=84ms
+03:34:26.360 INFO  Sensor IaC hadolint report Sensor [iac]
+03:34:26.361 INFO  Sensor IaC hadolint report Sensor [iac] (done) | time=1ms
+03:34:26.362 INFO  Sensor Java Config Sensor [iac]
+03:34:26.372 INFO  There are no files to be analyzed for the Java language
+03:34:26.373 INFO  Sensor Java Config Sensor [iac] (done) | time=11ms
+03:34:26.373 INFO  Sensor IaC Docker Sensor [iac]
+03:34:26.374 INFO  There are no files to be analyzed for the Docker language
+03:34:26.374 INFO  Sensor IaC Docker Sensor [iac] (done) | time=2ms
+03:34:26.374 INFO  Sensor JavaScript/TypeScript/CSS analysis [javascript]
+03:34:26.912 INFO  Detected os: Linux arch: amd64 alpine: false. Platform: LINUX_X64
+03:34:26.918 INFO  Deploy location /opt/sonar-scanner/.sonar/js/node-runtime, tagetRuntime: /opt/sonar-scanner/.sonar/js/node-runtime/node,  version: /opt/sonar-scanner/.sonar/js/node-runtime/version.txt
+03:34:31.188 INFO  Using embedded Node.js runtime.
+03:34:31.193 INFO  Using Node.js executable: '/opt/sonar-scanner/.sonar/js/node-runtime/node'.
+03:34:35.546 INFO  Memory configuration: OS (6930 MB), Node.js (2240 MB).
+03:34:35.863 INFO  WebSocket client connected on /ws
+03:34:35.873 INFO  Plugin version: [12.3.0.39932]
+03:34:39.231 INFO  Found 1 tsconfig.json file(s): [/var/jenkins_home/workspace/curso-devops-lab3_main/tsconfig.json]
+03:34:42.236 INFO  11 source files to be analyzed
+03:34:42.240 INFO  Creating TypeScript(5.9.3) program with configuration file /var/jenkins_home/workspace/curso-devops-lab3_main/tsconfig.json [lib: lib.es2024.d.ts, lib.dom.d.ts]
+03:34:42.241 INFO  Analyzing 11 file(s) from tsconfig /var/jenkins_home/workspace/curso-devops-lab3_main/tsconfig.json (82 total files in program)
+03:34:42.241 INFO  11/11 source files have been analyzed
+03:34:42.276 INFO  Hit the cache for 0 out of 11
+03:34:42.279 INFO  Miss the cache for 11 out of 11: ANALYSIS_MODE_INELIGIBLE [11/11]
+03:34:42.279 INFO  Sensor JavaScript/TypeScript/CSS analysis [javascript] (done) | time=15895ms
+03:34:42.280 INFO  Sensor JavaScript/TypeScript Coverage [javascript]
+03:34:42.376 INFO  No LCOV files were found using coverage/lcov.info
+03:34:42.378 WARN  No coverage information will be saved because all LCOV files cannot be found.
+03:34:42.379 INFO  Sensor JavaScript/TypeScript Coverage [javascript] (done) | time=105ms
+03:34:42.379 INFO  Sensor TextAndSecretsSensor [text]
+03:34:42.417 INFO  Available processors: 8
+03:34:42.418 INFO  Using 8 threads for analysis.
+03:34:43.179 INFO  The property "sonar.tests" is not set. To improve the analysis accuracy, we categorize a file as a test file if any of the following is true:
+  * The filename starts with "test"
+  * The filename contains "test." or "tests."
+  * Any directory in the file path is named: "doc", "docs", "test", "tests", "mock" or "mocks"
+  * Any directory in the file path has a name ending in "test" or "tests"
+
+03:34:43.238 INFO  Start fetching files for the text and secrets analysis
+03:34:43.327 INFO  Using Git CLI to retrieve dirty files
+03:34:43.490 INFO  Retrieving language associated files and files included via "sonar.text.inclusions" that are tracked by git
+03:34:43.491 INFO  Starting the text and secrets analysis
+03:34:43.494 INFO  11 source files to be analyzed for the text and secrets analysis
+03:34:43.868 INFO  11/11 source files have been analyzed for the text and secrets analysis
+03:34:43.886 INFO  Sensor TextAndSecretsSensor [text] (done) | time=1511ms
+03:34:43.923 INFO  ------------- Run sensors on project
+03:34:44.408 INFO  Sensor Zero Coverage Sensor
+03:34:44.432 INFO  Sensor Zero Coverage Sensor (done) | time=26ms
+03:34:44.433 INFO  ------------- Gather SCA dependencies on project
+03:34:44.442 INFO  Dependency analysis skipped
+03:34:44.468 INFO  CPD Executor 7 files had no CPD blocks
+03:34:44.468 INFO  CPD Executor Calculating CPD for 4 files
+03:34:44.489 INFO  CPD Executor CPD calculation finished (done) | time=19ms
+03:34:44.502 INFO  SCM revision ID 'd249e917ad541f5244d038611495b40387313227'
+03:34:44.746 INFO  Analysis report generated in 237ms, dir size=284.1 kB
+03:34:44.789 INFO  Analysis report compressed in 39ms, zip size=50.3 kB
+03:34:44.921 INFO  Analysis report uploaded in 127ms
+03:34:44.930 INFO  ANALYSIS SUCCESSFUL, you can find the results at: http://sonarqube:9000/dashboard?id=curso-devops-lab3
+03:34:44.932 INFO  Note that you will be able to access the updated dashboard once the server has processed the submitted analysis report
+03:34:44.932 INFO  More about the report processing at http://sonarqube:9000/api/ce/task?id=f6a46d78-eccf-469e-a1fa-e50f8909607d
+03:34:45.772 INFO  Analysis total time: 25.565 s
+03:34:45.782 INFO  SonarScanner Engine completed successfully
+03:34:46.256 INFO  EXECUTION SUCCESS
+03:34:46.278 INFO  Total time: 38.422s
+[Pipeline] }
+[Pipeline] // withSonarQubeEnv
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (QA - Quality Gate)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] waitForQualityGate
+Checking status of SonarQube task 'f6a46d78-eccf-469e-a1fa-e50f8909607d' on server 'sonarqube'
+SonarQube task 'f6a46d78-eccf-469e-a1fa-e50f8909607d' status is 'IN_PROGRESS'
+SonarQube task 'f6a46d78-eccf-469e-a1fa-e50f8909607d' status is 'SUCCESS'
+SonarQube task 'f6a46d78-eccf-469e-a1fa-e50f8909607d' completed. Quality gate is 'OK'
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+$ docker stop --time=1 9a288560e05a7de51c0e1cdfe473cb6c348ac1fb74f49859151f3eee54b150fe
+$ docker rm -f --volumes 9a288560e05a7de51c0e1cdfe473cb6c348ac1fb74f49859151f3eee54b150fe
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Continous Deployment)
+[Pipeline] stage
+[Pipeline] { (CD - Build and Push to Docker Hub)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ docker buildx build --platform linux/arm64,linux/amd64 -t curso-devops-lab3 .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 530B 0.0s done
+#1 DONE 0.0s
+
+#2 [linux/arm64 internal] load metadata for docker.io/library/node:24
+#2 DONE 0.0s
+
+#3 [linux/amd64 internal] load metadata for docker.io/library/node:24
+#3 DONE 0.0s
+
+#4 [linux/amd64 internal] load metadata for docker.io/library/node:24-alpine
+#4 DONE 1.9s
+
+#5 [linux/arm64 internal] load metadata for docker.io/library/node:24-alpine
+#5 DONE 1.9s
+
+#6 [internal] load .dockerignore
+#6 transferring context: 2B 0.0s done
+#6 DONE 0.0s
+
+#7 [linux/arm64 stage-1 1/5] FROM docker.io/library/node:24-alpine@sha256:d1b3b4da11eefd5941e7f0b9cf17783fc99d9c6fc34884a665f40a06dbdfc94f
+#7 resolve docker.io/library/node:24-alpine@sha256:d1b3b4da11eefd5941e7f0b9cf17783fc99d9c6fc34884a665f40a06dbdfc94f 0.0s done
+#7 DONE 0.0s
+
+#8 [linux/amd64 stage-1 1/5] FROM docker.io/library/node:24-alpine@sha256:d1b3b4da11eefd5941e7f0b9cf17783fc99d9c6fc34884a665f40a06dbdfc94f
+#8 resolve docker.io/library/node:24-alpine@sha256:d1b3b4da11eefd5941e7f0b9cf17783fc99d9c6fc34884a665f40a06dbdfc94f 0.0s done
+#8 DONE 0.0s
+
+#9 [linux/amd64 build 1/5] FROM docker.io/library/node:24@sha256:33cf7f057918860b043c307751ef621d74ac96f875b79b6724dcebf2dfd0db6d
+#9 resolve docker.io/library/node:24@sha256:33cf7f057918860b043c307751ef621d74ac96f875b79b6724dcebf2dfd0db6d 0.0s done
+#9 DONE 0.0s
+
+#10 [linux/arm64 build 1/5] FROM docker.io/library/node:24@sha256:33cf7f057918860b043c307751ef621d74ac96f875b79b6724dcebf2dfd0db6d
+#10 resolve docker.io/library/node:24@sha256:33cf7f057918860b043c307751ef621d74ac96f875b79b6724dcebf2dfd0db6d 0.0s done
+#10 DONE 0.0s
+
+#11 [internal] load build context
+#11 transferring context: 19.95kB 0.0s done
+#11 DONE 0.0s
+
+#12 [linux/arm64 build 2/5] WORKDIR /app
+#12 CACHED
+
+#13 [linux/amd64 build 2/5] WORKDIR /app
+#13 CACHED
+
+#14 [linux/amd64 build 3/5] COPY ./ ./
+#14 DONE 0.1s
+
+#15 [linux/arm64 build 3/5] COPY ./ ./
+#15 DONE 0.1s
+
+#16 [linux/arm64 build 4/5] RUN npm install
+#16 3.915 npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+#16 6.208 npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+#16 7.926 npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+#16 7.936 npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+#16 7.941 npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+#16 ...
+
+#17 [linux/amd64 build 4/5] RUN npm install
+#17 9.982 npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+#17 13.64 npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+#17 ...
+
+#16 [linux/arm64 build 4/5] RUN npm install
+#16 16.90 
+#16 16.90 added 687 packages, and audited 688 packages in 16s
+#16 16.90 
+#16 16.90 144 packages are looking for funding
+#16 16.90   run `npm fund` for details
+#16 16.90 
+#16 16.90 found 0 vulnerabilities
+#16 16.91 npm notice
+#16 16.91 npm notice New minor version of npm available! 11.12.1 -> 11.13.0
+#16 16.91 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.13.0
+#16 16.91 npm notice To update run: npm install -g npm@11.13.0
+#16 16.91 npm notice
+#16 DONE 17.5s
+
+#17 [linux/amd64 build 4/5] RUN npm install
+#17 16.98 npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+#17 16.99 npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+#17 17.00 npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+#17 ...
+
+#18 [linux/arm64 build 5/5] RUN npm run build
+#18 0.516 
+#18 0.516 > curso-devops-lab3@0.0.1 build
+#18 0.516 > nest build
+#18 0.516 
+#18 DONE 3.9s
+
+#17 [linux/amd64 build 4/5] RUN npm install
+#17 ...
+
+#19 [linux/arm64 stage-1 2/5] WORKDIR /usr/app
+#19 CACHED
+
+#20 [linux/arm64 stage-1 3/5] COPY --from=build /app/dist /usr/app/dist
+#20 CACHED
+
+#21 [linux/arm64 stage-1 4/5] COPY --from=build /app/package*.json /usr/app/
+#21 CACHED
+
+#22 [linux/arm64 stage-1 5/5] RUN npm install --only=production
+#22 CACHED
+
+#17 [linux/amd64 build 4/5] RUN npm install
+#17 27.37 
+#17 27.37 added 687 packages, and audited 688 packages in 26s
+#17 27.37 
+#17 27.37 144 packages are looking for funding
+#17 27.37   run `npm fund` for details
+#17 27.37 
+#17 27.37 found 0 vulnerabilities
+#17 27.38 npm notice
+#17 27.38 npm notice New minor version of npm available! 11.12.1 -> 11.13.0
+#17 27.38 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.13.0
+#17 27.38 npm notice To update run: npm install -g npm@11.13.0
+#17 27.38 npm notice
+#17 DONE 27.8s
+
+#23 [linux/amd64 build 5/5] RUN npm run build
+#23 1.364 
+#23 1.364 > curso-devops-lab3@0.0.1 build
+#23 1.364 > nest build
+#23 1.364 
+#23 DONE 6.5s
+
+#24 [linux/amd64 stage-1 2/5] WORKDIR /usr/app
+#24 CACHED
+
+#25 [linux/amd64 stage-1 3/5] COPY --from=build /app/dist /usr/app/dist
+#25 CACHED
+
+#26 [linux/amd64 stage-1 4/5] COPY --from=build /app/package*.json /usr/app/
+#26 CACHED
+
+#27 [linux/amd64 stage-1 5/5] RUN npm install --only=production
+#27 CACHED
+
+#28 exporting to image
+#28 exporting layers done
+#28 exporting manifest sha256:5dd284f359dfca9f974b7ae03a9f54a74ffdf6a8143d2cfa2831d98e0db235e7 done
+#28 exporting config sha256:a3749ccb8db8e4a946d3a6eb18810597dff2f9889b67ad93615304d3455f0e97 done
+#28 exporting attestation manifest sha256:0d2cf781d6fb7006f5a7c341fead5061d3356cdfd1878e65659857ead076af76 done
+#28 exporting manifest sha256:0f905abf1ad2c4baad79228ad9f96b51cba873261d4ece1174a288cbdec00746 done
+#28 exporting config sha256:e66ee7c3004a731bfdd8ce0b70cef53485f694604f67b65db197475cec6c7074 done
+#28 exporting attestation manifest sha256:718cda2b872045daaae08d7a79e1f8cdd923c071e03b2a857723a35141efc609 done
+#28 exporting manifest list sha256:a04b9592648abbf9cf79a2525f1bca6aa1444a80b65b0e520d1e94ecdc8d5a83 done
+#28 naming to docker.io/library/curso-devops-lab3:latest done
+#28 unpacking to docker.io/library/curso-devops-lab3:latest done
+#28 DONE 0.1s
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withDockerRegistry
+$ docker login -u melco28 -p ******** https://index.docker.io/v1/
+WARNING! Using --password via the CLI is insecure. Use --password-stdin.
+
+WARNING! Your credentials are stored unencrypted in '/var/jenkins_home/workspace/curso-devops-lab3_main@tmp/fbf8e6bc-a63c-48f8-b111-7ae53efd33fc/config.json'.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/go/credential-store/
+
+Login Succeeded
+[Pipeline] {
+[Pipeline] sh
++ docker tag curso-devops-lab3 melco28/curso-devops-lab3:latest
+[Pipeline] sh
++ docker tag curso-devops-lab3 melco28/curso-devops-lab3:57
+[Pipeline] sh
++ docker tag curso-devops-lab3 melco28/curso-devops-lab3:0.0.1
+[Pipeline] sh
++ docker push melco28/curso-devops-lab3:latest
+The push refers to repository [docker.io/melco28/curso-devops-lab3]
+6f5d26f0af99: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+3eebacc30b80: Waiting
+a69553331d00: Waiting
+06e652385f83: Waiting
+8af4aa91e791: Waiting
+6a0ac1617861: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+aa9553f84611: Waiting
+85317a4b0f43: Waiting
+f026acefba25: Waiting
+20fcb97bf252: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+9af8c5455d91: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+aa9553f84611: Waiting
+85317a4b0f43: Waiting
+f026acefba25: Waiting
+20fcb97bf252: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+9af8c5455d91: Waiting
+6f5d26f0af99: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+3eebacc30b80: Waiting
+a69553331d00: Waiting
+06e652385f83: Waiting
+8af4aa91e791: Waiting
+6a0ac1617861: Waiting
+20fcb97bf252: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+9af8c5455d91: Waiting
+6f5d26f0af99: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+3eebacc30b80: Waiting
+a69553331d00: Waiting
+06e652385f83: Waiting
+8af4aa91e791: Waiting
+6a0ac1617861: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+aa9553f84611: Waiting
+85317a4b0f43: Waiting
+f026acefba25: Waiting
+20fcb97bf252: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+9af8c5455d91: Waiting
+6f5d26f0af99: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+3eebacc30b80: Waiting
+a69553331d00: Waiting
+06e652385f83: Waiting
+8af4aa91e791: Waiting
+6a0ac1617861: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+aa9553f84611: Waiting
+85317a4b0f43: Waiting
+f026acefba25: Waiting
+3eebacc30b80: Waiting
+a69553331d00: Waiting
+06e652385f83: Waiting
+8af4aa91e791: Waiting
+6a0ac1617861: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+aa9553f84611: Waiting
+85317a4b0f43: Waiting
+f026acefba25: Waiting
+20fcb97bf252: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+9af8c5455d91: Waiting
+6f5d26f0af99: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+6f5d26f0af99: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+3eebacc30b80: Waiting
+a69553331d00: Waiting
+06e652385f83: Waiting
+8af4aa91e791: Waiting
+6a0ac1617861: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+aa9553f84611: Waiting
+85317a4b0f43: Waiting
+f026acefba25: Waiting
+20fcb97bf252: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+9af8c5455d91: Waiting
+f026acefba25: Waiting
+20fcb97bf252: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+9af8c5455d91: Waiting
+6f5d26f0af99: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+3eebacc30b80: Waiting
+a69553331d00: Waiting
+06e652385f83: Waiting
+8af4aa91e791: Waiting
+6a0ac1617861: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+aa9553f84611: Waiting
+85317a4b0f43: Waiting
+a69553331d00: Waiting
+06e652385f83: Waiting
+8af4aa91e791: Layer already exists
+6a0ac1617861: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+aa9553f84611: Waiting
+85317a4b0f43: Layer already exists
+f026acefba25: Waiting
+20fcb97bf252: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+9af8c5455d91: Waiting
+6f5d26f0af99: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Layer already exists
+3eebacc30b80: Waiting
+6f5d26f0af99: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+3eebacc30b80: Waiting
+a69553331d00: Layer already exists
+06e652385f83: Waiting
+6a0ac1617861: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+aa9553f84611: Waiting
+f026acefba25: Waiting
+20fcb97bf252: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+9af8c5455d91: Waiting
+6a0ac1617861: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+aa9553f84611: Waiting
+f026acefba25: Waiting
+20fcb97bf252: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+9af8c5455d91: Waiting
+6f5d26f0af99: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+3eebacc30b80: Waiting
+06e652385f83: Waiting
+3eebacc30b80: Layer already exists
+06e652385f83: Layer already exists
+6a0ac1617861: Layer already exists
+1ba15d4bb83a: Layer already exists
+d17f077ada11: Layer already exists
+aa9553f84611: Layer already exists
+f026acefba25: Layer already exists
+20fcb97bf252: Waiting
+1a83a5a3545d: Layer already exists
+40e51ee5a567: Layer already exists
+9af8c5455d91: Layer already exists
+6f5d26f0af99: Waiting
+f66a7cf725ff: Layer already exists
+e8b3ad3b4d12: Layer already exists
+20fcb97bf252: Waiting
+20fcb97bf252: Pushed
+6f5d26f0af99: Pushed
+latest: digest: sha256:a04b9592648abbf9cf79a2525f1bca6aa1444a80b65b0e520d1e94ecdc8d5a83 size: 1609
+[Pipeline] sh
++ docker push melco28/curso-devops-lab3:57
+The push refers to repository [docker.io/melco28/curso-devops-lab3]
+8af4aa91e791: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+1ba15d4bb83a: Waiting
+aa9553f84611: Waiting
+f026acefba25: Waiting
+f66a7cf725ff: Waiting
+3eebacc30b80: Waiting
+6f5d26f0af99: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+6a0ac1617861: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+6f5d26f0af99: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+6a0ac1617861: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+8af4aa91e791: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+1ba15d4bb83a: Waiting
+aa9553f84611: Waiting
+f026acefba25: Waiting
+f66a7cf725ff: Waiting
+3eebacc30b80: Waiting
+f66a7cf725ff: Waiting
+3eebacc30b80: Waiting
+6f5d26f0af99: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+6a0ac1617861: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+8af4aa91e791: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+1ba15d4bb83a: Waiting
+aa9553f84611: Waiting
+f026acefba25: Waiting
+6f5d26f0af99: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+6a0ac1617861: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+8af4aa91e791: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+1ba15d4bb83a: Waiting
+aa9553f84611: Waiting
+f026acefba25: Waiting
+f66a7cf725ff: Waiting
+3eebacc30b80: Waiting
+a69553331d00: Waiting
+6a0ac1617861: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+8af4aa91e791: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+1ba15d4bb83a: Waiting
+aa9553f84611: Waiting
+f026acefba25: Waiting
+f66a7cf725ff: Waiting
+3eebacc30b80: Waiting
+6f5d26f0af99: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+6a0ac1617861: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+8af4aa91e791: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+1ba15d4bb83a: Waiting
+aa9553f84611: Waiting
+f026acefba25: Waiting
+f66a7cf725ff: Waiting
+3eebacc30b80: Waiting
+6f5d26f0af99: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+6a0ac1617861: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+8af4aa91e791: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+1ba15d4bb83a: Waiting
+aa9553f84611: Waiting
+f026acefba25: Waiting
+f66a7cf725ff: Waiting
+3eebacc30b80: Waiting
+6f5d26f0af99: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+e8b3ad3b4d12: Waiting
+6f5d26f0af99: Already exists
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+6a0ac1617861: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+8af4aa91e791: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+1ba15d4bb83a: Waiting
+aa9553f84611: Waiting
+f026acefba25: Waiting
+f66a7cf725ff: Waiting
+3eebacc30b80: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+6a0ac1617861: Layer already exists
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+8af4aa91e791: Waiting
+d17f077ada11: Layer already exists
+9af8c5455d91: Waiting
+1ba15d4bb83a: Waiting
+aa9553f84611: Waiting
+f026acefba25: Waiting
+f66a7cf725ff: Waiting
+3eebacc30b80: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+e8b3ad3b4d12: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+1a83a5a3545d: Waiting
+40e51ee5a567: Waiting
+8af4aa91e791: Waiting
+9af8c5455d91: Waiting
+1ba15d4bb83a: Waiting
+aa9553f84611: Waiting
+f026acefba25: Waiting
+f66a7cf725ff: Waiting
+3eebacc30b80: Waiting
+20fcb97bf252: Already exists
+85317a4b0f43: Layer already exists
+06e652385f83: Layer already exists
+e8b3ad3b4d12: Layer already exists
+d7319775d025: Layer already exists
+a69553331d00: Layer already exists
+1a83a5a3545d: Layer already exists
+40e51ee5a567: Layer already exists
+8af4aa91e791: Layer already exists
+9af8c5455d91: Layer already exists
+1ba15d4bb83a: Layer already exists
+aa9553f84611: Layer already exists
+f026acefba25: Layer already exists
+f66a7cf725ff: Layer already exists
+3eebacc30b80: Layer already exists
+57: digest: sha256:a04b9592648abbf9cf79a2525f1bca6aa1444a80b65b0e520d1e94ecdc8d5a83 size: 1609
+[Pipeline] sh
++ docker push melco28/curso-devops-lab3:0.0.1
+The push refers to repository [docker.io/melco28/curso-devops-lab3]
+a69553331d00: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+06e652385f83: Waiting
+1a83a5a3545d: Waiting
+e8b3ad3b4d12: Waiting
+3eebacc30b80: Waiting
+8af4aa91e791: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+9af8c5455d91: Waiting
+6f5d26f0af99: Waiting
+6a0ac1617861: Waiting
+40e51ee5a567: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+20fcb97bf252: Waiting
+20fcb97bf252: Waiting
+a69553331d00: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+06e652385f83: Waiting
+1a83a5a3545d: Waiting
+e8b3ad3b4d12: Waiting
+3eebacc30b80: Waiting
+8af4aa91e791: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+9af8c5455d91: Waiting
+6f5d26f0af99: Waiting
+6a0ac1617861: Waiting
+40e51ee5a567: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+6f5d26f0af99: Waiting
+6a0ac1617861: Waiting
+40e51ee5a567: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+20fcb97bf252: Waiting
+a69553331d00: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+06e652385f83: Waiting
+1a83a5a3545d: Waiting
+e8b3ad3b4d12: Waiting
+3eebacc30b80: Waiting
+8af4aa91e791: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+9af8c5455d91: Waiting
+8af4aa91e791: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+9af8c5455d91: Waiting
+6f5d26f0af99: Waiting
+6a0ac1617861: Waiting
+40e51ee5a567: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+20fcb97bf252: Waiting
+a69553331d00: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+06e652385f83: Waiting
+1a83a5a3545d: Waiting
+e8b3ad3b4d12: Waiting
+3eebacc30b80: Waiting
+6f5d26f0af99: Waiting
+6a0ac1617861: Waiting
+40e51ee5a567: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+20fcb97bf252: Waiting
+a69553331d00: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+06e652385f83: Waiting
+1a83a5a3545d: Waiting
+e8b3ad3b4d12: Waiting
+3eebacc30b80: Waiting
+8af4aa91e791: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+9af8c5455d91: Waiting
+20fcb97bf252: Waiting
+a69553331d00: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+06e652385f83: Waiting
+1a83a5a3545d: Waiting
+e8b3ad3b4d12: Waiting
+3eebacc30b80: Waiting
+8af4aa91e791: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+9af8c5455d91: Waiting
+6f5d26f0af99: Waiting
+6a0ac1617861: Waiting
+40e51ee5a567: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+8af4aa91e791: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+9af8c5455d91: Waiting
+6f5d26f0af99: Waiting
+6a0ac1617861: Waiting
+40e51ee5a567: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+20fcb97bf252: Waiting
+a69553331d00: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+06e652385f83: Waiting
+1a83a5a3545d: Waiting
+e8b3ad3b4d12: Waiting
+3eebacc30b80: Waiting
+aa9553f84611: Waiting
+06e652385f83: Waiting
+1a83a5a3545d: Waiting
+e8b3ad3b4d12: Waiting
+3eebacc30b80: Waiting
+8af4aa91e791: Layer already exists
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+9af8c5455d91: Waiting
+6f5d26f0af99: Already exists
+6a0ac1617861: Waiting
+40e51ee5a567: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Layer already exists
+20fcb97bf252: Waiting
+a69553331d00: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+e8b3ad3b4d12: Layer already exists
+3eebacc30b80: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+9af8c5455d91: Waiting
+6a0ac1617861: Waiting
+40e51ee5a567: Layer already exists
+1ba15d4bb83a: Waiting
+20fcb97bf252: Waiting
+a69553331d00: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+06e652385f83: Waiting
+1a83a5a3545d: Layer already exists
+a69553331d00: Waiting
+d17f077ada11: Layer already exists
+f026acefba25: Waiting
+aa9553f84611: Waiting
+06e652385f83: Layer already exists
+3eebacc30b80: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Layer already exists
+9af8c5455d91: Layer already exists
+6a0ac1617861: Layer already exists
+1ba15d4bb83a: Waiting
+20fcb97bf252: Already exists
+85317a4b0f43: Layer already exists
+1ba15d4bb83a: Layer already exists
+a69553331d00: Layer already exists
+f026acefba25: Layer already exists
+aa9553f84611: Layer already exists
+3eebacc30b80: Layer already exists
+0.0.1: digest: sha256:a04b9592648abbf9cf79a2525f1bca6aa1444a80b65b0e520d1e94ecdc8d5a83 size: 1609
+[Pipeline] }
+[Pipeline] // withDockerRegistry
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withDockerRegistry
+$ docker login -u melacorletto@gmail.com -p ******** https://ghcr.io/v1/
+WARNING! Using --password via the CLI is insecure. Use --password-stdin.
+
+WARNING! Your credentials are stored unencrypted in '/var/jenkins_home/workspace/curso-devops-lab3_main@tmp/50bbc42a-b3f6-42d5-b17f-b39774290f2c/config.json'.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/go/credential-store/
+
+Login Succeeded
+[Pipeline] {
+[Pipeline] sh
++ docker tag curso-devops-lab3 ghcr.io/mgcb/curso-devops-lab3:latest
+[Pipeline] sh
++ docker tag curso-devops-lab3 ghcr.io/mgcb/curso-devops-lab3:57
+[Pipeline] sh
++ docker tag curso-devops-lab3 ghcr.io/mgcb/curso-devops-lab3:0.0.1
+[Pipeline] sh
++ docker push ghcr.io/mgcb/curso-devops-lab3:latest
+The push refers to repository [ghcr.io/mgcb/curso-devops-lab3]
+40e51ee5a567: Waiting
+f026acefba25: Waiting
+e8b3ad3b4d12: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+06e652385f83: Waiting
+3eebacc30b80: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+aa9553f84611: Waiting
+20fcb97bf252: Waiting
+d17f077ada11: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+6a0ac1617861: Waiting
+a69553331d00: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+06e652385f83: Waiting
+3eebacc30b80: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+aa9553f84611: Waiting
+20fcb97bf252: Waiting
+d17f077ada11: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+6a0ac1617861: Waiting
+a69553331d00: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+40e51ee5a567: Waiting
+f026acefba25: Waiting
+e8b3ad3b4d12: Waiting
+f026acefba25: Waiting
+e8b3ad3b4d12: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+06e652385f83: Waiting
+3eebacc30b80: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+aa9553f84611: Waiting
+20fcb97bf252: Waiting
+d17f077ada11: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+6a0ac1617861: Waiting
+a69553331d00: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+40e51ee5a567: Waiting
+40e51ee5a567: Waiting
+f026acefba25: Waiting
+e8b3ad3b4d12: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+06e652385f83: Waiting
+3eebacc30b80: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+aa9553f84611: Waiting
+20fcb97bf252: Waiting
+d17f077ada11: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+6a0ac1617861: Waiting
+a69553331d00: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+e8b3ad3b4d12: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+06e652385f83: Waiting
+3eebacc30b80: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+aa9553f84611: Waiting
+20fcb97bf252: Waiting
+d17f077ada11: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+6a0ac1617861: Waiting
+a69553331d00: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+40e51ee5a567: Waiting
+f026acefba25: Waiting
+e8b3ad3b4d12: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+06e652385f83: Waiting
+3eebacc30b80: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+aa9553f84611: Waiting
+20fcb97bf252: Waiting
+d17f077ada11: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+6a0ac1617861: Waiting
+a69553331d00: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+40e51ee5a567: Waiting
+f026acefba25: Waiting
+e8b3ad3b4d12: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+06e652385f83: Waiting
+3eebacc30b80: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+aa9553f84611: Waiting
+20fcb97bf252: Waiting
+d17f077ada11: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+6a0ac1617861: Waiting
+a69553331d00: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+40e51ee5a567: Waiting
+f026acefba25: Waiting
+40e51ee5a567: Waiting
+f026acefba25: Waiting
+e8b3ad3b4d12: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+06e652385f83: Waiting
+3eebacc30b80: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+aa9553f84611: Waiting
+20fcb97bf252: Waiting
+d17f077ada11: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+6a0ac1617861: Waiting
+a69553331d00: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+40e51ee5a567: Waiting
+f026acefba25: Waiting
+e8b3ad3b4d12: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+06e652385f83: Waiting
+3eebacc30b80: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+aa9553f84611: Waiting
+20fcb97bf252: Waiting
+d17f077ada11: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+6a0ac1617861: Waiting
+a69553331d00: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+8af4aa91e791: Waiting
+06e652385f83: Waiting
+3eebacc30b80: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+aa9553f84611: Waiting
+20fcb97bf252: Waiting
+d17f077ada11: Waiting
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+6a0ac1617861: Waiting
+a69553331d00: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+40e51ee5a567: Waiting
+f026acefba25: Waiting
+e8b3ad3b4d12: Waiting
+6f5d26f0af99: Waiting
+e8b3ad3b4d12: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Layer already exists
+06e652385f83: Waiting
+3eebacc30b80: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+aa9553f84611: Waiting
+20fcb97bf252: Waiting
+d17f077ada11: Layer already exists
+85317a4b0f43: Waiting
+d7319775d025: Waiting
+6a0ac1617861: Waiting
+a69553331d00: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+40e51ee5a567: Waiting
+f026acefba25: Waiting
+40e51ee5a567: Layer already exists
+f026acefba25: Layer already exists
+e8b3ad3b4d12: Layer already exists
+6f5d26f0af99: Waiting
+06e652385f83: Layer already exists
+3eebacc30b80: Layer already exists
+1ba15d4bb83a: Layer already exists
+f66a7cf725ff: Layer already exists
+aa9553f84611: Layer already exists
+20fcb97bf252: Waiting
+85317a4b0f43: Layer already exists
+d7319775d025: Layer already exists
+6a0ac1617861: Layer already exists
+a69553331d00: Layer already exists
+1a83a5a3545d: Layer already exists
+9af8c5455d91: Layer already exists
+20fcb97bf252: Waiting
+6f5d26f0af99: Waiting
+20fcb97bf252: Waiting
+6f5d26f0af99: Waiting
+20fcb97bf252: Pushed
+6f5d26f0af99: Pushed
+latest: digest: sha256:a04b9592648abbf9cf79a2525f1bca6aa1444a80b65b0e520d1e94ecdc8d5a83 size: 1609
+[Pipeline] sh
++ docker push ghcr.io/mgcb/curso-devops-lab3:57
+The push refers to repository [ghcr.io/mgcb/curso-devops-lab3]
+d17f077ada11: Waiting
+f026acefba25: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+06e652385f83: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+20fcb97bf252: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+40e51ee5a567: Waiting
+85317a4b0f43: Waiting
+aa9553f84611: Waiting
+6a0ac1617861: Waiting
+3eebacc30b80: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+8af4aa91e791: Waiting
+40e51ee5a567: Waiting
+85317a4b0f43: Waiting
+aa9553f84611: Waiting
+6a0ac1617861: Waiting
+3eebacc30b80: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+06e652385f83: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+20fcb97bf252: Waiting
+6f5d26f0af99: Waiting
+f026acefba25: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+06e652385f83: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+20fcb97bf252: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+40e51ee5a567: Waiting
+85317a4b0f43: Waiting
+aa9553f84611: Waiting
+6a0ac1617861: Waiting
+3eebacc30b80: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+d17f077ada11: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+06e652385f83: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+20fcb97bf252: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+40e51ee5a567: Waiting
+85317a4b0f43: Waiting
+aa9553f84611: Waiting
+6a0ac1617861: Waiting
+3eebacc30b80: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+1ba15d4bb83a: Waiting
+20fcb97bf252: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+40e51ee5a567: Waiting
+85317a4b0f43: Waiting
+aa9553f84611: Waiting
+6a0ac1617861: Waiting
+3eebacc30b80: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+06e652385f83: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+06e652385f83: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+20fcb97bf252: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+40e51ee5a567: Waiting
+85317a4b0f43: Waiting
+aa9553f84611: Waiting
+6a0ac1617861: Waiting
+3eebacc30b80: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+85317a4b0f43: Waiting
+aa9553f84611: Waiting
+6a0ac1617861: Waiting
+3eebacc30b80: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+06e652385f83: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+20fcb97bf252: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+40e51ee5a567: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+20fcb97bf252: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+40e51ee5a567: Waiting
+85317a4b0f43: Waiting
+aa9553f84611: Waiting
+6a0ac1617861: Waiting
+3eebacc30b80: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+06e652385f83: Waiting
+6a0ac1617861: Waiting
+3eebacc30b80: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+06e652385f83: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+20fcb97bf252: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+40e51ee5a567: Layer already exists
+85317a4b0f43: Waiting
+aa9553f84611: Waiting
+20fcb97bf252: Waiting
+6f5d26f0af99: Waiting
+8af4aa91e791: Waiting
+85317a4b0f43: Waiting
+aa9553f84611: Waiting
+6a0ac1617861: Waiting
+3eebacc30b80: Waiting
+1a83a5a3545d: Waiting
+9af8c5455d91: Waiting
+d17f077ada11: Waiting
+f026acefba25: Waiting
+1ba15d4bb83a: Waiting
+f66a7cf725ff: Waiting
+e8b3ad3b4d12: Waiting
+06e652385f83: Waiting
+d7319775d025: Waiting
+a69553331d00: Waiting
+85317a4b0f43: Layer already exists
+aa9553f84611: Layer already exists
+6a0ac1617861: Layer already exists
+3eebacc30b80: Layer already exists
+1a83a5a3545d: Layer already exists
+9af8c5455d91: Layer already exists
+d17f077ada11: Layer already exists
+f026acefba25: Layer already exists
+1ba15d4bb83a: Layer already exists
+f66a7cf725ff: Layer already exists
+e8b3ad3b4d12: Layer already exists
+06e652385f83: Layer already exists
+d7319775d025: Layer already exists
+a69553331d00: Layer already exists
+20fcb97bf252: Already exists
+6f5d26f0af99: Already exists
+8af4aa91e791: Layer already exists
+57: digest: sha256:a04b9592648abbf9cf79a2525f1bca6aa1444a80b65b0e520d1e94ecdc8d5a83 size: 1609
+[Pipeline] sh
++ docker push ghcr.io/mgcb/curso-devops-lab3:0.0.1
+The push refers to repository [ghcr.io/mgcb/curso-devops-lab3]
+6a0ac1617861: Waiting
+e8b3ad3b4d12: Waiting
+8af4aa91e791: Waiting
+d7319775d025: Waiting
+f66a7cf725ff: Waiting
+1a83a5a3545d: Waiting
+6f5d26f0af99: Waiting
+a69553331d00: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+40e51ee5a567: Waiting
+3eebacc30b80: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+f66a7cf725ff: Waiting
+1a83a5a3545d: Waiting
+6f5d26f0af99: Waiting
+a69553331d00: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+40e51ee5a567: Waiting
+3eebacc30b80: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+6a0ac1617861: Waiting
+e8b3ad3b4d12: Waiting
+8af4aa91e791: Waiting
+d7319775d025: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+6a0ac1617861: Waiting
+e8b3ad3b4d12: Waiting
+8af4aa91e791: Waiting
+d7319775d025: Waiting
+f66a7cf725ff: Waiting
+1a83a5a3545d: Waiting
+6f5d26f0af99: Waiting
+a69553331d00: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+40e51ee5a567: Waiting
+3eebacc30b80: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+6a0ac1617861: Waiting
+e8b3ad3b4d12: Waiting
+8af4aa91e791: Waiting
+d7319775d025: Waiting
+f66a7cf725ff: Waiting
+1a83a5a3545d: Waiting
+6f5d26f0af99: Waiting
+a69553331d00: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+40e51ee5a567: Waiting
+3eebacc30b80: Waiting
+aa9553f84611: Waiting
+40e51ee5a567: Waiting
+3eebacc30b80: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+6a0ac1617861: Waiting
+e8b3ad3b4d12: Waiting
+8af4aa91e791: Waiting
+d7319775d025: Waiting
+f66a7cf725ff: Waiting
+1a83a5a3545d: Waiting
+6f5d26f0af99: Waiting
+a69553331d00: Waiting
+f026acefba25: Waiting
+e8b3ad3b4d12: Waiting
+8af4aa91e791: Waiting
+d7319775d025: Waiting
+f66a7cf725ff: Waiting
+1a83a5a3545d: Waiting
+6f5d26f0af99: Waiting
+a69553331d00: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+40e51ee5a567: Waiting
+3eebacc30b80: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+6a0ac1617861: Waiting
+6f5d26f0af99: Waiting
+a69553331d00: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+40e51ee5a567: Waiting
+3eebacc30b80: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+6a0ac1617861: Waiting
+e8b3ad3b4d12: Waiting
+8af4aa91e791: Waiting
+d7319775d025: Waiting
+f66a7cf725ff: Waiting
+1a83a5a3545d: Waiting
+a69553331d00: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+40e51ee5a567: Waiting
+3eebacc30b80: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+6a0ac1617861: Waiting
+e8b3ad3b4d12: Waiting
+8af4aa91e791: Waiting
+d7319775d025: Waiting
+f66a7cf725ff: Waiting
+1a83a5a3545d: Waiting
+6f5d26f0af99: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Waiting
+06e652385f83: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+6a0ac1617861: Waiting
+e8b3ad3b4d12: Layer already exists
+8af4aa91e791: Waiting
+d7319775d025: Waiting
+f66a7cf725ff: Waiting
+1a83a5a3545d: Waiting
+6f5d26f0af99: Waiting
+a69553331d00: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+40e51ee5a567: Waiting
+3eebacc30b80: Waiting
+8af4aa91e791: Waiting
+d7319775d025: Layer already exists
+f66a7cf725ff: Waiting
+1a83a5a3545d: Waiting
+6f5d26f0af99: Waiting
+a69553331d00: Waiting
+f026acefba25: Waiting
+aa9553f84611: Waiting
+40e51ee5a567: Waiting
+3eebacc30b80: Waiting
+20fcb97bf252: Waiting
+85317a4b0f43: Layer already exists
+06e652385f83: Waiting
+1ba15d4bb83a: Waiting
+d17f077ada11: Waiting
+9af8c5455d91: Waiting
+6a0ac1617861: Waiting
+6f5d26f0af99: Already exists
+a69553331d00: Layer already exists
+f026acefba25: Layer already exists
+aa9553f84611: Layer already exists
+40e51ee5a567: Layer already exists
+3eebacc30b80: Layer already exists
+20fcb97bf252: Already exists
+06e652385f83: Layer already exists
+1ba15d4bb83a: Layer already exists
+d17f077ada11: Layer already exists
+9af8c5455d91: Layer already exists
+6a0ac1617861: Layer already exists
+8af4aa91e791: Layer already exists
+f66a7cf725ff: Layer already exists
+1a83a5a3545d: Layer already exists
+0.0.1: digest: sha256:a04b9592648abbf9cf79a2525f1bca6aa1444a80b65b0e520d1e94ecdc8d5a83 size: 1609
+[Pipeline] }
+[Pipeline] // withDockerRegistry
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (CD - Deploy to Kubernetes)
+[Pipeline] getContext
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . alpine/k8s:1.34.7
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container c8cf3ecd2449a2ead69ef766c59d3739ada682a6a0ddf847060cef91f9c31878
+$ docker run -t -d -u 0:0 -w /var/jenkins_home/workspace/curso-devops-lab3_main --volumes-from c8cf3ecd2449a2ead69ef766c59d3739ada682a6a0ddf847060cef91f9c31878 -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** alpine/k8s:1.34.7 cat
+$ docker top 1043d45a904c84a4c0d006722b805abb55a4469122f016fa83564cc35be05d51 -eo pid,comm
+[Pipeline] {
+[Pipeline] script
+[Pipeline] {
+[Pipeline] withKubeConfig
+[Pipeline] {
+[Pipeline] sh
++ kubectl set image deployment/curso-devops-lab3-deployment 'curso-devops-lab3=ghcr.io/mgcb/curso-devops-lab3:57' -n mcorletto
+deployment.apps/curso-devops-lab3-deployment image updated
+[Pipeline] sh
++ kubectl rollout status deployment/curso-devops-lab3-deployment -n mcorletto
+Waiting for deployment "curso-devops-lab3-deployment" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "curso-devops-lab3-deployment" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "curso-devops-lab3-deployment" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "curso-devops-lab3-deployment" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "curso-devops-lab3-deployment" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "curso-devops-lab3-deployment" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "curso-devops-lab3-deployment" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "curso-devops-lab3-deployment" rollout to finish: 1 old replicas are pending termination...
+deployment "curso-devops-lab3-deployment" successfully rolled out
+[Pipeline] }
+[kubernetes-cli] kubectl configuration cleaned up
+[Pipeline] // withKubeConfig
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+$ docker stop --time=1 1043d45a904c84a4c0d006722b805abb55a4469122f016fa83564cc35be05d51
+$ docker rm -f --volumes 1043d45a904c84a4c0d006722b805abb55a4469122f016fa83564cc35be05d51
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
