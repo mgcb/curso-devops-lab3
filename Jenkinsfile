@@ -111,12 +111,6 @@ pipeline {
                     }
                 }
                 stage('CD - Deploy to Kubernetes') {
-                    agent {
-                        docker {
-                            image 'alpine/k8s:1.34.7'
-                            reuseNode true
-                        }
-                    }
                     steps {
                         script {
                             withKubeConfig([credentialsId: 'k8s-cluster']) {
